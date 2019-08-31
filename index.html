@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <title>Tab 切换组件</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    a {
+      color: #000;
+      text-decoration: none;
+    }
+
+    ul li {
+      list-style: none;
+    }
+
+    .container {
+      margin: 10px;
+      width: 300px;
+      height: 250px;
+      color: #000;
+      border: 1px solid #ccc;
+    }
+
+    .tabCt::after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+
+    .tabCt li {
+      float: left;
+      padding: 5px;
+      width: 33.333333%;
+      border-bottom: 1px solid #ccc;
+      border-right: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .tabCt li.active {
+      background-color: #ccc;
+      opacity: 0.8;
+    }
+
+    .tabCt li:last-child {
+      border-right: none;
+    }
+
+    .tabCt li a {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .view {
+      display: none;
+      padding: 10px;
+    }
+
+    .view.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <ul class="tabCt">
+      <li class="active"><a href="#">tab1</a></li>
+      <li><a href="#">tab2</a></li>
+      <li><a href="#">tab3</a></li>
+    </ul>
+    <div class="view active">内容1</div>
+    <div class="view">内容2</div>
+    <div class="view">内容3</div>
+  </div>
+
+  <div class="container">
+      <ul class="tabCt">
+        <li class="active"><a href="#">tab1</a></li>
+        <li><a href="#">tab2</a></li>
+        <li><a href="#">tab3</a></li>
+      </ul>
+      <div class="view active">内容1</div>
+      <div class="view">内容2</div>
+      <div class="view">内容3</div>
+    </div>
+
+    <script>
+      function tab($ct) {
+        this.init($ct)
+        this.bind()
+      }
+
+      tab.prototype = {
+        init: function($ct) {
+          this.index = 0
+          this.$tabCt = $ct.find('.tabCt')
+          this.$view = $ct.find('.view')
+        },
+        bind: function() {
+          var _this = this
+          this.$tabCt.on('click', 'li', function() {
+            _this.index = $(this).index()
+            _this.$tabCt.find('li').eq(_this.index).addClass('active')
+                  .siblings().removeClass('active')
+            _this.$view.eq(_this.index).addClass('active')
+                  .siblings().removeClass('active')
+          })
+        }
+      }
+
+      $.fn.tabSwitch = function() {
+        $.each(this, function(index, node) {
+          new tab($(node))
+        })
+      }
+
+      $('.container').tabSwitch()
+    </script>
+</body>
+</html>
